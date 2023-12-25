@@ -1,11 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-const MapScreen = () => {
-  const navigation = useNavigation();
-
+export const MapScreen = () => {
   return (
     <View style={styles.container}>
       <MapView
@@ -43,5 +40,3 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
   },
 });
-
-export default MapScreen;

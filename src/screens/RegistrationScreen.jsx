@@ -47,6 +47,7 @@ export default function RegistrationScreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
+      keyboardVerticalOffset={-220}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View

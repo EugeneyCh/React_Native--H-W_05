@@ -1,16 +1,5 @@
-// import React from "react";
-// import { Text, View } from "react-native";
-
-// export default function CreatePostsScreen() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//       <Text>PostsScreen!</Text>
-//     </View>
-//   );
-// }
-
 import React, { useState, useEffect, useRef } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
@@ -18,10 +7,18 @@ export default function CreatePostsScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [photo, setPhoto] = useState("");
+
+  // const takePhoto = async () => {
+  //   const { uri } = await cameraRef.takePictureAsync();
+  //   await MediaLibrary.createAssetAsync(uri);
+  //   console.log("photo --->", uri);
+  // };
+  // which react - native
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
+      const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
 
       setHasPermission(status === "granted");
@@ -37,54 +34,84 @@ export default function CreatePostsScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type} ref={setCameraRef}>
-        <View style={styles.photoView}>
-          <TouchableOpacity
-            style={styles.flipContainer}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}
-          >
-            <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-              {" "}
-              Flip{" "}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={async () => {
-              if (cameraRef) {
-                const { uri } = await cameraRef.takePictureAsync();
-                await MediaLibrary.createAssetAsync(uri);
-              }
-            }}
-          >
-            <View style={styles.takePhotoOut}>
-              <View style={styles.takePhotoInner}></View>
+      <View style={styles.cameraBox}>
+        <Camera style={styles.camera} type={type} ref={setCameraRef}>
+          {photo && (
+            <View style={styles.takePhotoContainer}>
+              <Image style={styles.photoImage} source={{ uri: photo }} />
             </View>
-          </TouchableOpacity>
-        </View>
-      </Camera>
+          )}
+          <View style={styles.photoView}>
+            <TouchableOpacity
+              style={styles.flipContainer}
+              onPress={() => {
+                setType(
+                  type === Camera.Constants.Type.back
+                    ? Camera.Constants.Type.front
+                    : Camera.Constants.Type.back
+                );
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  // marginBottom: 10,
+                  color: "white",
+                }}
+              >
+                Flip
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {
+                if (cameraRef) {
+                  // takePhoto;
+                  const { uri } = await cameraRef.takePictureAsync();
+                  await MediaLibrary.createAssetAsync(uri);
+                  setPhoto(uri);
+                  console.log("photo --->", photo);
+                }
+              }}
+            >
+              <View style={styles.takePhotoOut}>
+                <View style={styles.takePhotoInner}></View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </Camera>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  camera: { flex: 1 },
+  container: {
+    flex: 1,
+    alignItems: "center",
+  },
+  cameraBox: {
+    width: "90%",
+    height: 240,
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  camera: {
+    flex: 1,
+    backgroundColor: "#E8E8E8",
+    // borderWidth: 1,
+  },
   photoView: {
     flex: 1,
     backgroundColor: "transparent",
     justifyContent: "flex-end",
+    marginBottom: 10,
   },
 
   flipContainer: {
-    flex: 0.1,
+    flex: 0.15,
     alignSelf: "flex-end",
+    paddingRight: 15,
   },
 
   button: { alignSelf: "center" },
@@ -99,6 +126,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 50,
   },
+  photoImage: {
+    alignSelf: "stretch",
+    flex: 1,
+  },
 
   takePhotoInner: {
     borderWidth: 2,
@@ -107,5 +138,14 @@ const styles = StyleSheet.create({
     width: 40,
     backgroundColor: "white",
     borderRadius: 50,
+  },
+  takePhotoContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    borderColor: "#fff",
+    borderWidth: 1,
+    height: "100%",
+    width: "100%",
   },
 });

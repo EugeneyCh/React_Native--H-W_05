@@ -48,6 +48,7 @@ export default function LoginScreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
+      keyboardVerticalOffset={-180}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
@@ -97,7 +98,6 @@ export default function LoginScreen() {
                 onPress={() => setPasswordIsShow((prevState) => !prevState)}
               >
                 <Text style={{ color: "#1B4371" }}>
-                  {" "}
                   {!passwordIsShow ? "Показати" : "Приховати"}
                 </Text>
               </TouchableOpacity>

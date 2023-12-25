@@ -6,16 +6,6 @@ import PostsScreen from "./PostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 
-// function createPostsButton() {
-//   return (
-//     <TouchableOpacity>
-//       <View style={styles.button}>
-//         <Text style={styles.buttonText}>+</Text>
-//       </View>
-//     </TouchableOpacity>
-//   );
-// }
-
 const Tabs = createBottomTabNavigator();
 
 const Home = () => {
